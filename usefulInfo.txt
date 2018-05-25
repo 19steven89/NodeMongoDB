@@ -1,0 +1,14 @@
+can view the mongodb data by opening the Robo3T app in home directory
+
+installed mongo db on the system. in the home directory.
+
+when running the app through the terminal run the command: ./mongod --dbpath ~/mongo-data
+in a separate terminal tab so mongodb can run whilst coding the app to use the db.
+
+
+installed the npm: npm install mongodb@2.2.5 --save
+for this app to access the db server and manipulate the DB using the mongodb library
+
+ran the program using: node playground/mongodb-connect.js
+
+which displays the MongoDB content in the output
