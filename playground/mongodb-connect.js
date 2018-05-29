@@ -1,4 +1,7 @@
-const MongoClient = require("mongodb").MongoClient;
+//const MongoClient = require("mongodb").MongoClient;
+
+//object destructuring. gets MongoClient name and ObjectId from mongoDb object
+const {MongoClient, ObjectId} = require("mongodb");
 
 //created MongoDB named TodoApp using port no: 27017
 MongoClient.connect("mongodb://localhost:27017/TodoApp", (err, db) => {
@@ -22,19 +25,19 @@ MongoClient.connect("mongodb://localhost:27017/TodoApp", (err, db) => {
   //
   // });
 
-  db.collection("users").insertOne({
-    name: "Steven",
-    age: 29,
-    location: "Glasgow"
-  }, (err, result) => {
-    if(err){
-      return console.log("Unable to insert into Users");
-    }
-
-    //ops attribute stores all of the docs that were inserted
-    console.log(JSON.stringify(result.ops, undefined, 2));
-
-  });
+  // db.collection("users").insertOne({
+  //   name: "Steven",
+  //   age: 29,
+  //   location: "Glasgow"
+  // }, (err, result) => {
+  //   if(err){
+  //     return console.log("Unable to insert into Users");
+  //   }
+  //
+  //   //ops attribute stores all of the docs that were inserted
+  //   console.log(JSON.stringify(result.ops[0]._id.getTimestamp()));
+  //
+  // });
 
 
   db.close();
