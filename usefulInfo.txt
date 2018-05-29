@@ -5,10 +5,14 @@ installed mongo db on the system. in the home directory.
 when running the app through the terminal run the command: ./mongod --dbpath ~/mongo-data
 in a separate terminal tab so mongodb can run whilst coding the app to use the db.
 
-
 installed the npm: npm install mongodb@2.2.5 --save
 for this app to access the db server and manipulate the DB using the mongodb library
 
 ran the program using: node playground/mongodb-connect.js
 
 which displays the MongoDB content in the output
+
+used count and toArray methods from the Node MongoDB driver API at the following url
+URL: http://mongodb.github.io/node-mongodb-native/2.0/api/Cursor.html#count
+
+this is useful for doing stuff with the collection of data in the MongoDB
