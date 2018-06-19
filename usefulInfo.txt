@@ -21,3 +21,7 @@ this is useful for doing stuff with the collection of data in the MongoDB
 used the following url which is the node mongodb documentation to increment the
 age field in the users collection in mongodb
 https://docs.mongodb.com/manual/reference/operator/update/inc/
+
+added the express npm
+also added body-parser npm using the following command:
+npm i express@4.14.0 body-parser@1.15.2 --save
