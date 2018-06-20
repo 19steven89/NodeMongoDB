@@ -4,12 +4,23 @@ const request = require("supertest");
 var {app} = require("./../server.js");
 var {Todo} = require("./../models/todo.js")
 
+
+const todos = [{
+  text: "First test todo",
+}, {
+  text: "Second test todo"
+}];
+
+
 //ensures that the DBis empty by removing everything from the Todos collection before
 // each test is ran. this way the test below should pass by ensuring the
 // length is now 1, using this line below: expect(todos.length).toBe(1);
 
 beforeEach((done) => {
-  Todo.remove({}).then(() => done());
+  Todo.remove({}).then(() => {
+    //insert the todos array defined above to add the data to the MongoDB collection
+    return Todo.insertMany(todos)
+  }).then(() => done());
 });
 
 describe("POST /todos", () => {
@@ -27,7 +38,10 @@ describe("POST /todos", () => {
       if(err){
         return done(err);
       }
-      Todo.find().then((todos) => {
+      //find the todo where the text is equal to the text variable defined above
+      //i.e. var text = "Test todo text";
+
+      Todo.find({text}).then((todos) => {
         //toBe(1) as 1 todo item should be added to the DB
         expect(todos.length).toBe(1);
         expect(todos[0].text).toBe(text);
@@ -49,10 +63,24 @@ describe("POST /todos", () => {
       }
       Todo.find().then((todos) => {
         //toBe(0) as the data should not be added with empty text field, as above in
-        expect(todos.length).toBe(0);
+        expect(todos.length).toBe(2);
         done();
         //catch error and pass it in to done
       }).catch((e) => done(e));
     });
   });
+});
+
+
+describe("GET /todos", () => {
+  it("Should get all todos", (done) => {
+    //request data from the express application
+    request(app)
+    .get("/todos")
+    .expect(200)
+    .expect((res) => {
+      expect(res.body.todos.length).toBe(2);
+    }).end(done);
+  });
+
 });
