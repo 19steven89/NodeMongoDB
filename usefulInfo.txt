@@ -25,3 +25,15 @@ https://docs.mongodb.com/manual/reference/operator/update/inc/
 added the express npm
 also added body-parser npm using the following command:
 npm i express@4.14.0 body-parser@1.15.2 --save
+
+installed npm's for testing using: npm i expect@1.20.2 mocha@3.0.2 nodemon@1.10.2 supertest@2.0.0 --save-dev
+
+npm uses:
+expect for assertions
+mocha for the entire test suite
+supertest which is used to test the express routes
+
+
+added these 2 lines to the package.json file for testing the app
+"test": "mocha server/**/*.test.js",
+"test-watch": "nodemon --exec 'npm test'"
