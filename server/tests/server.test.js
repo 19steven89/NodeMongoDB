@@ -71,7 +71,6 @@ describe("POST /todos", () => {
   });
 });
 
-
 describe("GET /todos", () => {
   it("Should get all todos", (done) => {
     //request data from the express application
@@ -82,5 +81,4 @@ describe("GET /todos", () => {
       expect(res.body.todos.length).toBe(2);
     }).end(done);
   });
-
 });
