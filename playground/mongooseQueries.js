@@ -13,7 +13,6 @@ User.findById('5b28f7951999412d1f6f217f').then((user) => {
   console.log("User", user);
 }, (e) => console.log(e));
 
-
 // var id = "5b2ad8d5f1f1dad921d90de6";
 //
 // if(!ObjectId.isValid(id)){
