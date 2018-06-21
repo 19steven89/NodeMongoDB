@@ -37,3 +37,11 @@ supertest which is used to test the express routes
 added these 2 lines to the package.json file for testing the app
 "test": "mocha server/**/*.test.js",
 "test-watch": "nodemon --exec 'npm test'"
+
+
+in server.js implemented a route that handles an object Id sent by the users request,
+this has been done in Postman by testing a GET request using the ObjectId 5b2ad8d5f1f1dad921d90de6
+with the URL localhost:3000/todos/5b2ad8d5f1f1dad921d90de6. in the terminal it returns the mongodb
+document for this ObjectId. And when an invalid ID is input the code in server,js
+handles This by outputting to the user ID not found. such as by entering
+localhost:3000/todos/123 in postman.  
