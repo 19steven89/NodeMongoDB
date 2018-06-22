@@ -57,4 +57,7 @@ to the package.json file so that Heroku knows which version of node i am using
 
 in terminal used: heroku create
 then: heroku addons:create mongolab:sandbox
-This uses a mongodb with sandbox which uses mLab for cloud hosting MongoDB apps 
+then git push heroku master to add the app to the server
+This uses a mongodb with sandbox which uses mLab for cloud hosting MongoDB apps
+
+the URL for the app: https://serene-chamber-16763.herokuapp.com/
