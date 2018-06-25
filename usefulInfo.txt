@@ -61,3 +61,9 @@ then git push heroku master to add the app to the server
 This uses a mongodb with sandbox which uses mLab for cloud hosting MongoDB apps
 
 the URL for the app: https://serene-chamber-16763.herokuapp.com/
+
+added dynamic URL to postman to switch between local and server environments
+easily.
+
+using postman added DELETE /todos:id route which can be used to delete todos in the
+mongodb collection using a specified id
