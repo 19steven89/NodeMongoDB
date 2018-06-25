@@ -70,7 +70,10 @@ app.delete("/todos/:id", (req, res) => {
       console.log("ID not found, cannot delete");
       return res.status(404).send();
     }
-    res.send(todo);
+
+    //used ES6 syntax which is the equivalent to todo: todo
+    //i.e. the todo is equal to the todo to be deleted
+    res.send({todo});
 
   }, (e) => {
     return res.status(400).send();
@@ -86,8 +89,6 @@ app.get("/todos", (req, res) => {
     res.status(400).send(e);
   });
 });
-
-
 
 app.listen(port, () => {
   console.log(`Started on Port ${port}`);

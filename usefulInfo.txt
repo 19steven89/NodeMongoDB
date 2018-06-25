@@ -38,6 +38,7 @@ added these 2 lines to the package.json file for testing the app
 "test": "mocha server/**/*.test.js",
 "test-watch": "nodemon --exec 'npm test'"
 
+**To run the server.test.js unit tests, use the command: npm run test-watch from the terminal**
 
 in server.js implemented a route that handles an object Id sent by the users request,
 this has been done in Postman by testing a GET request using the ObjectId 5b2ad8d5f1f1dad921d90de6
