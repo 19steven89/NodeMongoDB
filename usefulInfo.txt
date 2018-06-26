@@ -68,3 +68,7 @@ easily.
 
 using postman added DELETE /todos:id route which can be used to delete todos in the
 mongodb collection using a specified id
+
+added route for PATCH which updates the todo text and completed fields
+tested using postman and added the route using the Heroku url to test todos updates
+as expected. 
