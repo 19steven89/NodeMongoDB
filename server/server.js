@@ -1,9 +1,10 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var {ObjectId} = require("mongodb");
-var {mongoose} = require("./db/mongoose.js");
-var {Todo} = require("./models/todo.js");
-var {User} = require("./models/user.js");
+const _ = require("lodash");
+const express = require("express");
+const bodyParser = require("body-parser");
+const {ObjectId} = require("mongodb");
+const {mongoose} = require("./db/mongoose.js");
+const {Todo} = require("./models/todo.js");
+const {User} = require("./models/user.js");
 
 var app = express();
 //use port available from heroku, else use port 3000
@@ -55,6 +56,15 @@ app.get("/todos/:id", (req, res) => {
   //res.send(req.params);
 });
 
+//get request to get all of the todos
+app.get("/todos", (req, res) => {
+  Todo.find().then((todos) => {
+    res.send({todos})
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
 app.delete("/todos/:id", (req, res) => {
   //get the id
   var id = req.params.id;
@@ -80,15 +90,40 @@ app.delete("/todos/:id", (req, res) => {
   });
 });
 
+//used to update a todo text or completed field in the MongoDB collection
+app.patch("/todos/:id", (req, res) => {
+  var id = req.params.id;
+  //_.pick is a lodash method. text and completed are the properties
+  //the user should be able to update
+  var body = _.pick(req.body, ['text', 'completed']);
 
-//get request to get all of the todos
-app.get("/todos", (req, res) => {
-  Todo.find().then((todos) => {
-    res.send({todos})
-  }, (e) => {
-    res.status(400).send(e);
+  //validate the ID
+  if(!ObjectId.isValid(id)){
+    return res.status(404).send();
+  }
+
+  if(_.isBoolean(body.completed) && body.completed){
+    //if its a boolean and completed
+    body.completedAt = new Date().getTime();
+  } else{
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  //$set is a mongodb operator. new is part of the mongoose npm
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    if(!todo){
+      //if no todo send 404 status
+      return  res.status(404).send();
+    }
+      //if successful send back todo using ES6 syntax
+      return res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
   });
+
 });
+
 
 app.listen(port, () => {
   console.log(`Started on Port ${port}`);
