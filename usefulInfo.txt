@@ -71,4 +71,9 @@ mongodb collection using a specified id
 
 added route for PATCH which updates the todo text and completed fields
 tested using postman and added the route using the Heroku url to test todos updates
-as expected. 
+as expected.
+
+altered the package.json file to contain the following code:
+"test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
+this line configures the environment, export is for OSX & Linux and
+SET is for Windows environment.
