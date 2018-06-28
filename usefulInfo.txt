@@ -77,3 +77,5 @@ altered the package.json file to contain the following code:
 "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
 this line configures the environment, export is for OSX & Linux and
 SET is for Windows environment.
+
+installed npm vallidator for use in the user.js file to validate the users email
