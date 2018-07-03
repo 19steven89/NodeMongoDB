@@ -79,3 +79,9 @@ this line configures the environment, export is for OSX & Linux and
 SET is for Windows environment.
 
 installed npm vallidator for use in the user.js file to validate the users email
+
+added npm i crypto-js@3.1.6 --save
+for use in password hashing
+
+added npm i jsonwebtoken@7.1.9 --save
+for use in web token paswrod hashing
