@@ -130,15 +130,17 @@ app.patch("/todos/:id", (req, res) => {
 app.post("/users", (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   //var user = new User(body);
-
   var user = new User({
     email: body.email,
     password: body.password
   });
 
-  user.save().then((doc) => {
-    res.send(doc);
-  }, (e) => {
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    //Params: header name: "x-auth", value you want to set the header to: token
+    res.header("x-auth", token).send(user);
+  }).catch ((e) => {
     res.status(400).send(e);
   });
 });
