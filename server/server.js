@@ -7,6 +7,8 @@ const {ObjectId} = require("mongodb");
 const {mongoose} = require("./db/mongoose.js");
 const {Todo} = require("./models/todo.js");
 const {User} = require("./models/user.js");
+const {authenticate} = require("./middleware/authenticate.js")
+//get function defined in the authenticate.js file
 
 var app = express();
 //use port available from heroku, else use port 3000
@@ -143,6 +145,12 @@ app.post("/users", (req, res) => {
   }).catch ((e) => {
     res.status(400).send(e);
   });
+});
+
+
+//use the authenticate function defined for the route in the authenticate.js function
+app.get("/users/me", authenticate, (req, res) => {
+  res.send(req.user);
 });
 
 app.listen(port, () => {
