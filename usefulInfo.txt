@@ -85,3 +85,5 @@ for use in password hashing
 
 added npm i jsonwebtoken@7.1.9 --save
 for use in web token paswrod hashing
+
+added npm i bcryptjs@2.3.0 --save for hashing and salting passwords 
