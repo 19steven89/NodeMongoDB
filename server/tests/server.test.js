@@ -3,31 +3,17 @@ const request = require("supertest");
 const {ObjectId} = require("mongodb");
 const _ = require("lodash");
 
-var {app} = require("./../server.js");
-var {Todo} = require("./../models/todo.js")
 
-
-const todos = [{
-  _id: new ObjectId(),
-  text: "First test todo",
-}, {
-  _id: new ObjectId(),
-  text: "Second test todo",
-  completed: true,
-  completedAt: 333
-}];
-
+const {app} = require("./../server.js");
+const {Todo} = require("./../models/todo.js")
+const {todos, populateTodos, users, populateUsers} = require("./seed/seed.js");
 
 //ensures that the DBis empty by removing everything from the Todos collection before
 // each test is ran. this way the test below should pass by ensuring the
 // length is now 1, using this line below: expect(todos.length).toBe(1);
 
-beforeEach((done) => {
-  Todo.remove({}).then(() => {
-    //insert the todos array defined above to add the data to the MongoDB collection
-    return Todo.insertMany(todos)
-  }).then(() => done());
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 describe("POST /todos", () => {
   it("should create a new todo", (done) => {
