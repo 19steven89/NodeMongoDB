@@ -7,6 +7,7 @@ const _ = require("lodash");
 const {app} = require("./../server.js");
 const {Todo} = require("./../models/todo.js")
 const {todos, populateTodos, users, populateUsers} = require("./seed/seed.js");
+const {User} = require("./../models/user.js");
 
 //ensures that the DBis empty by removing everything from the Todos collection before
 // each test is ran. this way the test below should pass by ensuring the
@@ -178,6 +179,81 @@ describe("PATCH /todos/:id", () => {
       expect(res.body.todo.completed).toBe(false)
       expect(res.body.todo.completedAt).toNotExist();
     })
+    .end(done);
+  });
+});
+
+describe("GET /users/me", () => {
+  it("should return a user if authenticated", (done) => {
+    request(app)
+    .get("/users/me")
+    .set("x-auth", users[0].tokens[0].token)
+    .expect(200)
+    .expect((res) => {
+      //expected value from the result.body should be equal to the users array
+      expect(res.body._id).toBe(users[0]._id.toHexString());
+      expect(res.body.email).toBe(users[0].email);
+    }).end(done);
+  });
+
+  it("should return a 401 if not authenticated", (done) => {
+    request(app)
+    .get("/users/me")
+    .expect(401)
+    .expect((res) => {
+      expect(res.body).toEqual({});
+    })
+    .end(done);
+  });
+});
+
+describe("POST /users", () => {
+  it("Should create a user", (done) => {
+    var email = "example@example.com";
+    var pword = "1234abcd";
+
+    request(app)
+    .post("/users")
+    .send({email, pword})
+    .expect(200)
+    .expect((res) => {
+      expect(res.headers["x-auth"]).toExist()
+      expect(res.body._id).toExist();
+      expect(res.body.email).toBe(email);
+    })
+    .end((err) => {
+      if(err){
+        return done(err);
+      }
+      User.findOne({email}).then((user) => {
+        expect(user).toExist();
+        //should not be pword above as the user.password should be a hashed value
+        expect(user.password).toNotBe(pword);
+        done();
+      });
+    });
+  });
+
+  it("Should return  validation error if request invalid", (done) => {
+    request(app)
+    .post("/users")
+    .send({
+      email: "ste",
+      pword: "123"
+    })
+    .expect(400)
+    .end(done);
+  });
+
+  it("It should not create a user if the email is alreafy in use", (done) => {
+    var email = "steven@example.com";
+    var pword = "def123";
+
+    request(app)
+    .post("/users")
+    .send({email, pword})
+    //made email invalid as its already in the DB in the seed.js file so 400 expected
+    .expect(400)
     .end(done);
   });
 });
