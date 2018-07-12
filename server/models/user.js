@@ -51,7 +51,7 @@ UserSchema.methods.generateAuthToken = function () {
   var token = jwt.sign({_id: user._id.toHexString(), access}, "abc123").toString();
 
   user.tokens.push({access, token});
-  
+
   return user.save().then(() => {
     return token;
   });
@@ -113,6 +113,19 @@ UserSchema.pre("save", function (next) {
   }
 
 });
+
+//method used to log a user out of their account, its used in server.js
+UserSchema.methods.removeToken = function (token){
+  var user = this;
+
+  //$pull is a MongoDB Operator. return the token value when this function is called in server.js
+  return user.update({
+      $pull: {
+        //pull the token passed in from the token parameter passed in
+        tokens: {token}
+      }
+  });
+}
 
 var User = mongoose.model("User", UserSchema);
 

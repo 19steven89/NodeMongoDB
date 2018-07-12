@@ -169,6 +169,16 @@ app.post("/users/login", (req, res) => {
   });
 });
 
+//Route used to log a user out of their account, by deleting the x-auth token for that user logged in
+app.delete("/users/me/token", authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    //if unsuccessful send 400 back
+    res.status(400).send();
+  });
+});
+
 app.listen(port, () => {
   console.log(`Started on Port ${port}`);
 });
