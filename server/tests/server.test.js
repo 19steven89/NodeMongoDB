@@ -311,3 +311,25 @@ describe("/users/login", () => {
     });
   });
 });
+
+describe("DELETE /users/me/token", () => {
+  it("should remove auth token when user logs out", (done) => {
+    request(app)
+    .delete("/users/me/token")
+    //set x-auth equal to token
+    .set("x-auth", users[0].tokens[0].token)
+    .expect(200)
+    .end((err, res) => {
+      if(err){
+        return done(err);
+      }
+
+      User.findById(users[1]._id).then((user) => {
+        //verify that the tokens array has a length of 0, as it should have been deleted using
+        //the http request to log the user out
+        expect(user.tokens.length).toBe(0);
+        done();
+      }).catch((e) => done(e));
+    });
+  });
+});
