@@ -14,6 +14,12 @@ var Todo = mongoose.model("Todo", {
   completedAt: {
     type: Number,
     default: null
+  },
+  //the underscore is used to show it is an ObjectID
+  //store the ID of the user in MongoDB to the type field listed below
+  _creator: {
+    required: true,
+    type: mongoose.Schema.Types.ObjectId
   }
 });
 

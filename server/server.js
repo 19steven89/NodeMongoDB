@@ -18,10 +18,12 @@ const port = process.env.PORT;
 //middleware
 app.use(bodyParser.json());
 
-//2 args: the URL and the callback function
-app.post("/todos", (req, res) => {
+//3 args: the URL, the callback function and authenticate to make the todos private
+app.post("/todos", authenticate, (req, res) => {
   var todo = new Todo({
-    text: req.body.text
+    text: req.body.text,
+    //creator keeps todos private to the user that created it
+    _creator: req.user._id
   });
 
   todo.save().then((doc) => {
@@ -35,7 +37,7 @@ app.post("/todos", (req, res) => {
 
 //GET /Todos.   :id creates id variable on request object.
 //request and response params
-app.get("/todos/:id", (req, res) => {
+app.get("/todos/:id", authenticate, (req, res) => {
   var id = req.params.id;
 
   //ObjectId references the var declared above = to require(mongodb)
@@ -45,7 +47,10 @@ app.get("/todos/:id", (req, res) => {
     return res.status(404).send();
   }
 
-  Todo.findById(id).then((todo) => {
+  Todo.findOne({
+    _id: id,
+    _creator: req.user._id
+  }).then((todo) => {
     if(!todo){
       console.log("ID not found");
       return res.status(404).send();
@@ -61,15 +66,19 @@ app.get("/todos/:id", (req, res) => {
 });
 
 //get request to get all of the todos
-app.get("/todos", (req, res) => {
-  Todo.find().then((todos) => {
+app.get("/todos", authenticate, (req, res) => {
+  Todo.find({
+    //the get request will only return todos for that user, not every todo in the system
+    //this is done using the creator var below
+    _creator: req.user._id
+  }).then((todos) => {
     res.send({todos})
   }, (e) => {
     res.status(400).send(e);
   });
 });
 
-app.delete("/todos/:id", (req, res) => {
+app.delete("/todos/:id", authenticate, (req, res) => {
   //get the id
   var id = req.params.id;
 
@@ -79,7 +88,11 @@ app.delete("/todos/:id", (req, res) => {
     return res.status(404).send();
   }
 
-  Todo.findByIdAndRemove(id).then((todo) => {
+  Todo.findOneAndRemove({
+    //user can delete a todo from their own todo list, but cant access any unaouthorized
+    _creator: req.user._id,
+    _id: id
+  }).then((todo) => {
     if(!todo){
       console.log("ID not found, cannot delete");
       return res.status(404).send();
@@ -95,7 +108,7 @@ app.delete("/todos/:id", (req, res) => {
 });
 
 //used to update a todo text or completed field in the MongoDB collection
-app.patch("/todos/:id", (req, res) => {
+app.patch("/todos/:id", authenticate, (req, res) => {
   var id = req.params.id;
   //_.pick is a lodash method. text and completed are the properties
   //the user should be able to update
@@ -115,7 +128,7 @@ app.patch("/todos/:id", (req, res) => {
   }
 
   //$set is a mongodb operator. new is part of the mongoose npm
-  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+  Todo.findOneAndUpdate({_creator: req.user._id, _id: id}, {$set: body}, {new: true}).then((todo) => {
     if(!todo){
       //if no todo send 404 status
       return  res.status(404).send();
