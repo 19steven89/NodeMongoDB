@@ -86,4 +86,13 @@ for use in password hashing
 added npm i jsonwebtoken@7.1.9 --save
 for use in web token paswrod hashing
 
-added npm i bcryptjs@2.3.0 --save for hashing and salting passwords 
+added npm i bcryptjs@2.3.0 --save for hashing and salting passwords
+
+added the command: heroku config:set JWT_SECRET= "" followed by the secret which can be viewed
+using heroku config in the terminal. this adds a secret to the pwords in the heroku
+production application
+
+set up MongoDB collection for the deployed heroku app in RoboMongo
+This is named todo app api, created a new environment from the output listed using the
+heroku config command from the terminal which outputs details of the MONGODB_URI
+which are then used to set up RoboMongo with the deployed heroku app.
