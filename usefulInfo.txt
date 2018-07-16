@@ -96,3 +96,10 @@ set up MongoDB collection for the deployed heroku app in RoboMongo
 This is named todo app api, created a new environment from the output listed using the
 heroku config command from the terminal which outputs details of the MONGODB_URI
 which are then used to set up RoboMongo with the deployed heroku app.
+
+set up Postman with the follwing 2 lines under the "Test" section of a route
+var body = JSON.parse(responseBody);
+postman.setEnvironmentVariable("todoid", body._id);
+this lets the http request be sent with the users current todoid using {{todoid}}7
+environment variable, saving the bbother of having to type the user if at the end of each
+http request. 
