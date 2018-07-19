@@ -102,4 +102,6 @@ var body = JSON.parse(responseBody);
 postman.setEnvironmentVariable("todoid", body._id);
 this lets the http request be sent with the users current todoid using {{todoid}}7
 environment variable, saving the bbother of having to type the user if at the end of each
-http request. 
+http request.
+
+upgraded expect to V21 using: npm i expect@21.1.0 --save-dev
